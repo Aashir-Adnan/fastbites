@@ -1,16 +1,14 @@
-const logMessage = require("../Log_Functions/consoleLog");
 
-async function executeQuery(res, query, values, connection,endConnection=true) {
+async function executeQuery(query, values, connection,endConnection=true) {
   return new Promise((resolve, reject) => {
     connection.query(query, values, (err, result) => {
       if(endConnection)
       {connection.end();}
-      
+      console.log(["Query:", query]);
+      console.log(["With Values:", values]);
       if (err) {
         
-        logMessage(["Error Executing the Query:", err]);
-        logMessage(["Query:", query]);
-        logMessage(["With Values:", values]);
+        console.log(["Error Executing the Query:", err]);
   
         reject(new Error("Error executing the query. Please try again later.::"+  err));
         return; 

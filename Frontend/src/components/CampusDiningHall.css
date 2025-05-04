@@ -2,7 +2,7 @@
   min-height: 100vh;
   padding: 2rem;
   background-color: white;
-  font-family: 'Bahnschrift ', cursive, sans-serif;
+  font-family: 'Bahnschrift', cursive, sans-serif;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -11,9 +11,8 @@
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 3rem;
-  color: #000;
+  color: #328E6E; /* Dark Green */
   text-transform: uppercase;
-  font-weight: bold;
 }
 
 .loading {
@@ -40,7 +39,7 @@
   text-align: center;
   font-size: 3rem;
   margin-bottom: 1.5rem;
-  color: #000;
+  color: #328E6E; /* Dark Green */
 }
 
 .menu-items {
@@ -55,7 +54,6 @@
   align-items: center;
   padding: 0.8rem 1.2rem;
   border-radius: 25px;
-  font-weight: bold;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -70,11 +68,11 @@
 }
 
 .menu-item.yellow {
-  background-color: #FFD700;
+  background-color: #90C67C; /* Light Green */
 }
 
 .menu-item.beige {
-  background-color: #F5DEB3;
+  background-color: #E1EEBC; /* Very Light Green */
 }
 
 .item-name,
@@ -90,7 +88,7 @@
 }
 
 .order-now-button {
-  background-color: #f0f0f0;
+  background-color: #E1EEBC; /* Very Light Green */
   border: none;
   padding: 1rem 2rem;
   border-radius: 10px;
@@ -98,13 +96,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: 'Bahnschrift ', cursive, sans-serif;
-  font-weight: bold;
+  font-family: 'Bahnschrift', cursive, sans-serif;
   transition: background-color 0.3s ease;
 }
 
 .order-now-button:hover {
-  background-color: #e0e0e0;
+  background-color: #67AE6E; /* Medium Green */
 }
 
 .order-icon {
@@ -113,18 +110,17 @@
 }
 
 .next-button {
-  background-color: #FFD700;
+  background-color: #67AE6E; /* Medium Green */
   border: none;
   padding: 0.8rem 1.5rem;
   border-radius: 25px;
   cursor: pointer;
-  font-family: 'Bahnschrift ', cursive, sans-serif;
-  font-weight: bold;
+  font-family: 'Bahnschrift', cursive, sans-serif;
   transition: background-color 0.3s ease;
 }
 
 .next-button:hover {
-  background-color: #ffcc00;
+  background-color: #328E6E; /* Dark Green */
 }
 
 .pagination-buttons {
@@ -135,24 +131,22 @@
 }
 
 .pagination-button {
-  background-color: #f0f0f0;
+  background-color: #E1EEBC; /* Very Light Green */
   border: none;
   padding: 0.8rem 1.5rem;
   border-radius: 25px;
   cursor: pointer;
-  font-family: 'Bahnschrift ', cursive, sans-serif;
-  font-weight: bold;
+  font-family: 'Bahnschrift', cursive, sans-serif;
   transition: background-color 0.3s ease;
 }
 
 .pagination-button:hover {
-  background-color: #e0e0e0;
+  background-color: #67AE6E; /* Medium Green */
 }
 
 .page-number {
   font-size: 1.2rem;
-  font-weight: bold;
-  color: #000;
+  color: #328E6E; /* Dark Green */
 }
 
 @media (max-width: 768px) {
@@ -177,4 +171,110 @@
     position: static;
     margin-top: 1rem;
   }
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.review-button, .close-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.review-button {
+  background-color: #007BFF;
+  color: white;
+  margin-right: 10px;
+}
+
+.close-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.star-rating {
+  display: flex;
+  gap: 8px;
+  font-size: 1.8rem;
+  margin: 10px 0;
+  justify-content: center;
+}
+
+.star-icon {
+  cursor: pointer;
+  transition: color 0.2s ease-in-out, transform 0.2s ease;
+  color: #ccc;
+}
+
+.star-icon.filled {
+  color: #f8b400;
+  transform: scale(1.2);
+}
+
+.star-icon:hover {
+  color: #f39c12;
+}
+
+
+.star {
+  cursor: pointer;
+  margin: 0 0.2rem;
+  color: gold;
+  transition: transform 0.2s ease;
+}
+
+.star:hover {
+  transform: scale(2);
+}
+
+.filled {
+  color: orange;
+}
+
+.submit-rating-button {
+  margin-top: 10px;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-rating-button:hover {
+  background: #0056b3;
 }

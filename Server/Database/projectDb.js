@@ -4,7 +4,7 @@ const configuration = {
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'loan_app',
+  database: 'fastbites',
   timezone: '+05:00'
 };
 

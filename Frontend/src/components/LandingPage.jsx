@@ -34,12 +34,6 @@ const LandingPage = () => {
           <h2 className="tagline">Find it. Eat it. Review it. – Your Campus Food Guide! 🍔❓➡️</h2>
           
           <div className="search-container">
-            <button 
-              className="find-food-btn"
-              //onClick={handleFindFood}
-            >
-              FIND FOOD NEAR YOU
-            </button>
             <div className="auth-buttons">
               <button 
                 className="sign-in-btn"
@@ -57,13 +51,6 @@ const LandingPage = () => {
           </div>
         </motion.div>
         
-        <div className="featured-image">
-          <img 
-            src="/hero-image.jpg" 
-            alt="Delicious burgers and fries"
-            className="hero-image"
-          />
-        </div>
       </div>
     </div>
   );

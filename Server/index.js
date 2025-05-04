@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
-const dynamicRoutes = require('./routes/dynamicRoutes');
-const fileRoutes = require('./routes/fileRoutes');
 const crudRoutes = require('./routes/crudRoutes.js')
+const customRoutes = require('./routes/customRoutes.js')
+
 const applyMiddleware = require('./Protection_Protocols/middleware.js'); 
 require('./global.js');
 
@@ -13,10 +13,10 @@ const port = 3000
 
 const multer = require('multer');
 const path = require('path');
-const upload = multer({ dest: 'uploads/' }); // Store image in local folder
+const upload = multer({ dest: 'uploads/' });
 
 app.post('/upload', upload.single('image'), async (req, res) => {
-  const imagePath = req.file.path; // e.g., uploads/abc123.png
+  const imagePath = req.file.path; 
   await db.query('INSERT INTO attachments (image_path) VALUES (?)', [imagePath]);
   res.send('Uploaded successfully');
 });
@@ -28,12 +28,9 @@ app.use('/uploads', express.static('uploads'));
 
 async function initializeApp() {
     try {
-  
-      
       applyMiddleware(app);
       app.use('/api/crud', crudRoutes)
-      app.use('/api/file', fileRoutes);
-      // app.use('/api', dynamicRoutes);      
+      app.use('/api/custom', customRoutes)
       app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
       });

@@ -27,7 +27,7 @@ const StaffLogin = () => {
 
     try {
       // Get staff data from localStorage
-      const staffData = JSON.parse(localStorage.getItem('staff')) || [];
+      const staffData = JSON.parse(localStorage.getItem('currentUser')) || [];
 
       // Find staff member with matching email
       const staff = staffData.find(s => s.email === credentials.email);

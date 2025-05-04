@@ -1,101 +1,134 @@
+/* Base container with a flowing, animated background using provided colors */
 .dashboard-container {
   min-height: 100vh;
   padding: 2rem;
-  background-color: #f5f5f5;
-  font-family: 'Bahnschrift ', cursive, sans-serif;
+  font-family: 'Bahnschrift', cursive, sans-serif;
+  background: linear-gradient(45deg, #328E6E, #67AE6E, #90C67C);
+  background-size: 400% 400%;
+  animation: gradientFlow 10s ease infinite;
 }
 
+/* Header section with a soft background using a blend of the provided colors */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
   padding: 1rem;
-  background-color: white;
+  background-color: rgba(225, 238, 188, 0.8); /* Light color from provided palette */
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px); /* Blurring the background behind the header */
+  transition: background-color 0.3s ease;
+  position: relative; /* Allow positioning of logout button */
 }
 
-.dashboard-header h1 {
-  margin: 0;
-  color: #000;
-  font-size: 1.8rem;
-}
-
+/* User info section with modern styling and consistent colors */
 .user-info {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
+/* Header title styles using #328E6E for a strong contrast */
+.dashboard-header h1 {
+  margin: 0;
+  color: #328E6E;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: capitalize;
+  flex-grow: 1; /* Allow header content to take remaining space */
+}
+
+/* User info section with soft background color */
 .user-role,
 .user-roll,
 .user-position {
   padding: 0.5rem 1rem;
-  background-color: #f0f0f0;
+  background-color: #E1EEBC; /* Soft background color for user info */
   border-radius: 20px;
   font-size: 0.9rem;
+  font-weight: 500;
+  color: #328E6E; /* Strong contrast text color */
 }
 
 .logout-button {
-  padding: 0.5rem 1.5rem;
-  background-color: #ff4444;
-  color: white;
-  border: none;
+  padding: 0.5rem 1.2rem;
+  background-color: #E1EEBC;
+  color: #328E6E;
+  border: 2px solid #328E6E;
   border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  font-family: 'Bahnschrift ', cursive, sans-serif;
-  transition: background-color 0.2s;
+  font-family: 'Bahnschrift', cursive, sans-serif;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s ease-in-out;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
 }
 
 .logout-button:hover {
-  background-color: #cc0000;
+  background-color: #328E6E;
+  color: white;
+  transform: scale(1.05);
 }
 
+
+/* Content section with max width */
 .dashboard-content {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem;
 }
 
+/* Dashboard grid layout for responsive card design */
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
 }
 
+/* Card style with smooth hover effects */
 .dashboard-card {
-  background-color: white;
+  background-color: #E1EEBC; /* Soft background color */
   padding: 1.5rem;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s ease;
 }
 
 .dashboard-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #90C67C; /* Subtle color shift on hover */
 }
 
+/* Card text and description styles */
 .dashboard-card h3 {
   margin: 0 0 0.5rem 0;
-  color: #000;
+  color: #328E6E; /* Header text color */
   font-size: 1.3rem;
+  font-weight: bold;
 }
 
 .dashboard-card p {
   margin: 0;
-  color: #666;
+  color: #67AE6E; /* Soft, readable text color */
   font-size: 0.9rem;
 }
 
+/* Loading text with a soft color */
 .loading {
   text-align: center;
   font-size: 1.2rem;
-  color: #666;
+  color: #67AE6E; /* Loading text color */
   margin: 2rem 0;
+  animation: fadeIn 1.5s ease-in-out infinite alternate;
 }
 
+/* Mobile responsiveness */
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 1rem;
@@ -114,4 +147,27 @@
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-} 
+}
+
+/* Animation for the flowing gradient background */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Fading effect for loading text */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

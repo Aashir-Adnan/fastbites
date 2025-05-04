@@ -1,24 +1,33 @@
-// const sendResponse = require('../../Constants/response');
-// const getAttributes = require('../../Database/getAttributes');
+const sendResponse = require('../../Constants/response');
+const getAttributes = require('../../Database/getAttributes');
+const projectDB = require('../../Database/projectDb');
+const { executeQuery } = require('../../Database/queryExecution');
 
-// const crudPost = async (req, res) => {
-//     try {
-//         const attributes = getAttributes(req.body.table);
-//         const columns = attributes.array.join(', ');
-//         const values = req.body.entry.map(entry => {
-//             return `(${attributes.array.map(col => {
-//                 return `'${entry[col]}'`; 
-//             }).join(', ')})`;
-//         }).join(', '); 
+const crudDelete = async (req, res) => {
+    try {
+        const { resource } = req.params; // resource = table name
+        const { id } = req.body;         // ID of the record to delete
 
-//         let query = `INSERT INTO ${req.body.table} (${columns}) VALUES ${values}`;
+        if (!resource || !id) {
+            return sendResponse(res, 400, "Missing 'resource' or 'id' in request.");
+        }
 
-//         const insertedRecord = await database.query(query);
+        // Fetch table columns
+        const attributes = await getAttributes(resource);
+        const primaryKeyCol = attributes.find(attr => attr.COLUMN_KEY === 'PRI');
 
-//         sendResponse(res, '200', "Successfully Inserted", insertedRecord);
-//     } catch (error) {
-//         sendResponse(res, 500, "An Error Occurred In The CRUD Post Handler Function", error.message);
-//     }
-// };
+        if (!primaryKeyCol) {
+            return sendResponse(res, 400, `Primary key not found for table ${resource}`);
+        }
 
-// module.exports = crudPost;
+        const query = `DELETE FROM ${resource} WHERE ${primaryKeyCol.COLUMN_NAME} = ?`;
+        const connection = projectDB();
+        const deletedRecord = await executeQuery(res, query, [id], connection);
+
+        sendResponse(res, 200, "Successfully Deleted", deletedRecord);
+    } catch (error) {
+        sendResponse(res, 500, "An Error Occurred In The CRUD Delete Handler Function", error.message);
+    }
+};
+
+module.exports = crudDelete;

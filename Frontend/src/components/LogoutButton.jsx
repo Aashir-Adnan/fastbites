@@ -7,7 +7,7 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     // Clear all authentication data
-    localStorage.removeItem('currentStudent');
+    localStorage.removeItem('currentUser');
     localStorage.removeItem('currentStaff');
     
     // Redirect to landing page

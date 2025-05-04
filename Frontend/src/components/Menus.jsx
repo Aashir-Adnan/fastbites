@@ -1,67 +1,72 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // for navigation
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Menus.css';
 
 import placeholder from '../assets/placeholder.jpg';
 
-const cuisines = [
-  {
-    name: 'burgers',
-    displayName: 'Gourmet Burgers',
-    description: 'Packed with flavor and cooked to perfection',
-    image: placeholder,
-  },
-  {
-    name: 'wings',
-    displayName: 'Chicken Wings',
-    description: 'Paired with dipping sauces that are too good to pass up',
-    image: placeholder,
-  },
-  {
-    name: 'drinks',
-    displayName: 'Thirst Quenchers',
-    description: 'Choose from classic blends and unique concoctions',
-    image: placeholder,
-  },
-  {
-    name: 'rice',
-    displayName: 'Rice Bowls',
-    description: 'Hearty bowls with rich flavors and variety',
-    image: placeholder,
-  },
-];
-
-const restaurantData = {
-  burgers: [
-    { name: 'Burger Palace', rating: 4.5, priceRange: 'Mid-Range' },
-    { name: 'Grill House', rating: 4.2, priceRange: 'Budget' },
-  ],
-  wings: [
-    { name: 'Wing Stop', rating: 4.6, priceRange: 'Mid-Range' },
-    { name: 'Spicy Bites', rating: 4.3, priceRange: 'Expensive' },
-  ],
-  drinks: [
-    { name: 'Boba Bliss', rating: 4.8, priceRange: 'Mid-Range' },
-    { name: 'Juice Hub', rating: 4.1, priceRange: 'Budget' },
-  ],
-  rice: [
-    { name: 'Rice Bowl Express', rating: 4.4, priceRange: 'Mid-Range' },
-    { name: 'Eastern Delight', rating: 4.5, priceRange: 'Expensive' },
-  ],
-};
-
 const Menus = () => {
+  const [cuisines, setCuisines] = useState([]);
   const [selectedCuisine, setSelectedCuisine] = useState(null);
-  const navigate = useNavigate(); // useNavigate hook for navigation
+  const [restaurantData, setRestaurantData] = useState({});
+  const [currentCuisinePage, setCurrentCuisinePage] = useState(1);
+  const [currentRestaurantPage, setCurrentRestaurantPage] = useState(1);
+  const itemsPerPage = 3;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCuisines = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/crud/cuisines');
+        setCuisines(res.data.payload || []);
+      } catch (error) {
+        console.error('Failed to fetch cuisines:', error);
+      }
+    };
+    fetchCuisines();
+  }, []);
+
+  const fetchRestaurants = async (cuisineName) => {
+    try {
+      const res = await axios.post('http://localhost:3000/api/custom/get/restaurantdata', { name: cuisineName });
+      setRestaurantData((prev) => ({
+        [cuisineName.toLowerCase()]: res.data.payload || [],
+      }));
+    } catch (error) {
+      console.error(`Failed to fetch restaurants for ${cuisineName}:`, error);
+    }
+  };
 
   const handleCuisineClick = (cuisineName) => {
-    console.log('Clicked:', cuisineName); // this should show in dev tools
-    setSelectedCuisine(cuisineName === selectedCuisine ? null : cuisineName);
+    fetchRestaurants(cuisineName);
+    setSelectedCuisine(cuisineName);
   };
 
   const handleRestaurantClick = (restaurantName) => {
-    // Navigate to the restaurant details page and pass the restaurant name in the URL
     navigate(`/restaurant/${restaurantName}`);
+  };
+
+  const paginateData = (data, page) => {
+    const startIndex = (page - 1) * itemsPerPage;
+    return data.slice(startIndex, startIndex + itemsPerPage);
+  };
+
+  const handlePrevCuisinePage = () => {
+    if (currentCuisinePage > 1) setCurrentCuisinePage(currentCuisinePage - 1);
+  };
+
+  const handleNextCuisinePage = () => {
+    const totalPages = Math.ceil(cuisines.length / itemsPerPage);
+    if (currentCuisinePage < totalPages) setCurrentCuisinePage(currentCuisinePage + 1);
+  };
+
+  const handlePrevRestaurantPage = () => {
+    if (currentRestaurantPage > 1) setCurrentRestaurantPage(currentRestaurantPage - 1);
+  };
+
+  const handleNextRestaurantPage = () => {
+    const totalPages = Math.ceil((restaurantData[selectedCuisine?.toLowerCase()]?.length || 0) / itemsPerPage);
+    if (currentRestaurantPage < totalPages) setCurrentRestaurantPage(currentRestaurantPage + 1);
   };
 
   return (
@@ -71,44 +76,70 @@ const Menus = () => {
       </div>
 
       <div className="menu-cards-container">
-        {cuisines.map((cuisine) => (
+        {paginateData(cuisines, currentCuisinePage).map((cuisine) => (
           <div
-            key={cuisine.name}
-            className={`menu-card ${selectedCuisine === cuisine.name ? 'selected' : ''}`}
-            onClick={() => handleCuisineClick(cuisine.name)}
+            key={cuisine.id}
+            className={`menu-card ${selectedCuisine === cuisine.cuisine_name ? 'selected' : ''}`}
+            onClick={() => handleCuisineClick(cuisine.cuisine_name)}
           >
             <div
               className="card-image"
               style={{
-                backgroundImage: `url(${cuisine.image})`,
+                backgroundImage: `url(${cuisine.attachment_url 
+                  ? `http://localhost:3000/uploads/${cuisine.attachment_url}` 
+                  : placeholder})`,
               }}
             />
             <div className="card-content">
-              <h3>{cuisine.displayName}</h3>
-              <p>{cuisine.description}</p>
+              <h3>{cuisine.cuisine_name}</h3>
             </div>
           </div>
         ))}
       </div>
 
+      <div className="pagination-controls">
+        <button onClick={handlePrevCuisinePage} disabled={currentCuisinePage === 1}>
+          Previous Cuisine Page
+        </button>
+        <span>Page {currentCuisinePage}</span>
+        <button
+          onClick={handleNextCuisinePage}
+          disabled={currentCuisinePage >= Math.ceil(cuisines.length / itemsPerPage)}
+        >
+          Next Cuisine Page
+        </button>
+      </div>
+
       {selectedCuisine && (
         <div className="modal-overlay" onClick={() => setSelectedCuisine(null)}>
-  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-    <h2>Restaurants Serving {cuisines.find(c => c.name === selectedCuisine).displayName}</h2>
-    <div className="restaurant-list">
-      {restaurantData[selectedCuisine]?.map((restaurant, index) => (
-        <button 
-          key={index} 
-          className="restaurant-btn" 
-          onClick={() => handleRestaurantClick(restaurant.name)}
-        >
-          <strong>{restaurant.name}</strong> — {restaurant.rating}⭐ ({restaurant.priceRange})
-        </button>
-      ))}
-    </div>
-    <button className="close-btn" onClick={() => setSelectedCuisine(null)}>Close</button>
-  </div>
-</div>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Restaurants Serving {selectedCuisine}</h2>
+            <div className="restaurant-list">
+              {paginateData(restaurantData[selectedCuisine.toLowerCase()] || [], currentRestaurantPage).map((restaurant, index) => (
+                <button
+                  key={index}
+                  className="restaurant-btn"
+                  onClick={() => handleRestaurantClick(restaurant.name)}
+                >
+                  <strong>{restaurant.name}</strong> — {restaurant.rating}⭐ ({restaurant.priceRange})
+                </button>
+              ))}
+            </div>
+            <div className="pagination-controls">
+              <button onClick={handlePrevRestaurantPage} disabled={currentRestaurantPage === 1}>
+                Previous Restaurant Page
+              </button>
+              <span>Page {currentRestaurantPage}</span>
+              <button
+                onClick={handleNextRestaurantPage}
+                disabled={currentRestaurantPage >= Math.ceil((restaurantData[selectedCuisine.toLowerCase()]?.length || 0) / itemsPerPage)}
+              >
+                Next Restaurant Page
+              </button>
+            </div>
+            <button className="close-btn" onClick={() => setSelectedCuisine(null)}>Close</button>
+          </div>
+        </div>
       )}
     </div>
   );

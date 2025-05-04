@@ -1,14 +1,16 @@
+
+
 .login-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+  background: linear-gradient(135deg, #E1EEBC 0%, #F5F5F5 100%);
   padding: 1rem;
 }
 
 .login-card {
-  background-color: #FFD700;
+  background-color: #90C67C; /* Light Green */
   padding: 2rem;
   border-radius: 25px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -22,19 +24,48 @@
 }
 
 .login-title {
+  font-family: 'Bahnschrift', sans-serif; /* Explicitly add Bahnschrift */
   text-align: center;
   font-size: 2.5rem;
   font-weight: bold;
-  color: #000;
+  color: #328E6E; /* Dark Green */
   margin-bottom: 1rem;
 }
+
 
 .login-options {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.2rem;
   margin: 1rem 0;
 }
+
+.login-option-box {
+  padding: 1rem;
+  text-align: center;
+  border-radius: 15px;
+  font-size: 1.2rem;
+  font-family: 'Bahnschrift', sans-serif;
+  color: #1E3C2F;
+  background-color: #E1EEBC;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.login-option-box:hover {
+  background-color: #D5E8B3;
+  box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+  transform: translateY(-2px);
+}
+
+.login-option-box.selected {
+  background-color: #67AE6E; /* Medium green */
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 0 3px rgba(103, 174, 110, 0.3);
+}
+
 
 .login-option {
   display: flex;
@@ -46,7 +77,7 @@
 }
 
 .login-option:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(50, 142, 110, 0.1); /* Dark Green tint */
 }
 
 .login-option input[type="radio"] {
@@ -54,7 +85,7 @@
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
-  border: 2px solid #000;
+  border: 2px solid #328E6E; /* Dark Green */
   border-radius: 50%;
   outline: none;
   cursor: pointer;
@@ -62,8 +93,8 @@
 }
 
 .login-option input[type="radio"]:checked {
-  background-color: #000;
-  border-color: #000;
+  background-color: #328E6E;
+  border-color: #328E6E;
 }
 
 .login-option input[type="radio"]:checked::after {
@@ -74,21 +105,21 @@
   transform: translate(-50%, -50%);
   width: 8px;
   height: 8px;
-  background-color: #FFD700;
+  background-color: #E1EEBC; /* Beige */
   border-radius: 50%;
 }
 
 .login-option label {
   font-size: 1.2rem;
-  font-family: 'Bahnschrift ', cursive;
-  color: #000;
+  font-family: 'Bahnschrift', sans-serif;
+  color: #1E3C2F;
   cursor: pointer;
   flex: 1;
 }
 
 .login-submit-btn {
   background-color: white;
-  border: 2px solid #000;
+  border: 2px solid #328E6E; /* Dark Green */
   border-radius: 25px;
   padding: 0.8rem 2rem;
   font-size: 1.1rem;
@@ -96,12 +127,12 @@
   transition: transform 0.2s ease, background-color 0.2s ease;
   align-self: center;
   margin-top: 1rem;
-  font-family: 'Bahnschrift ', cursive;
+  font-family: 'Bahnschrift', sans-serif;
 }
 
 .login-submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  background-color: #000;
+  background-color: #328E6E; /* Dark Green */
   color: white;
 }
 
@@ -116,4 +147,5 @@
   right: 1rem;
   font-size: 2rem;
   transform: rotate(-15deg);
-} 
+}
+

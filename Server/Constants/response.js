@@ -1,4 +1,3 @@
-const logMessage = require('../Log_Functions/consoleLog.js');
 const {decryptArray,decryptObject} = require('./Decryption.js');
 async function sendResponse(res, status, message, payload, SCC = null) {
   if (payload && Array.isArray(payload)) {

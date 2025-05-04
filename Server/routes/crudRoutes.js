@@ -2,14 +2,12 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const router = express.Router();
-const validatorFunction = require('../middleware/validatorFunction');
-const checkUserPermission = require('../middleware/permissionValidator');
 const sendResponse = require('../Constants/response');
 
 const routeMap = {
 
 };
-router.use('/:resource/:action?' /*, validatorFunction*/,  async (req, res, next) => {
+router.use('/:resource/:action?',  async (req, res) => {
     const resource = req.params.resource;
     const method = req.method.toLowerCase(); 
 
@@ -19,9 +17,6 @@ router.use('/:resource/:action?' /*, validatorFunction*/,  async (req, res, next
             const routeKey = `${method} ${resource}`;
             if (routeMap[routeKey]) {
                 handlerPath = routeMap[routeKey];
-                // if (method != "post" && (resource != "signUp")){
-                //     await checkUserPermission(req, res, next);
-                // }
                 const handler = require(handlerPath);
                 if (typeof handler === 'function') {
                     return handler(req, res);

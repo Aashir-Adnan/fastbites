@@ -1,261 +1,177 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import './StudentSignup.css';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './StudentLogin.css';
 
-const StudentSignup = () => {
+const StudentLogin = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [credentials, setCredentials] = useState({
     rollNumber: '',
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    department: ''
+    password: ''
   });
-  const [errors, setErrors] = useState('');
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      setIsAuthenticated(true);
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
+  const validateRollNumber = (rollNumber) => {
+    const rollRegex = /^[L,l](1[7-9]|2[0-5])-?(?!0000)\d{4}$/;
+    return rollRegex.test(rollNumber);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
-    let error = '';
-  
-    if (name === "rollNumber") {
-      const rollRegex = /^[L,l](1[7-9]|2[0-5])-?(?!0000)\d{4}$/;
-      if (!rollRegex.test(value)) {
-        error = "Roll No. Must Be In The Format LXX-YYYY";
-      }
-    }
-  
-    if (name === "name") {
-      if (value.trim().length < 3) {
-        error = "Name must be at least 3 characters long";
-      }
-    }
-  
-    if (name === "email") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) {
-        error = "Invalid email format";
-      }
-    }
-  
-    if (name === "password") {
-      if (value.length < 6) {
-        error = "Password must be at least 6 characters";
-      }
-    }
-  
-    if (name === "confirmPassword") {
-      if (value !== formData.password) {
-        error = "Passwords do not match";
-      }
-    }
-  
-    if (name === "department") {
-      if (value.trim() === '') {
-        error = "Department is required";
-      }
-    }
-  
-    // Update form data and derived email
-    setFormData((prevData) => {
-      const updated = { ...prevData, [name]: value };
-      if (name === "rollNumber" && /^[L,l](1[7-9]|2[0-5])-?(?!0000)\d{4}$/.test(value)) {
-        updated.email = value.toLowerCase().replace("-", "") + "@lhr.nu.edu.pk";
-      }
-      return updated;
-    });
-  
-    // Set error
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: error,
-      ...(name === "password" || name === "confirmPassword"
-        ? {
-            confirmPassword:
-              name === "password" && formData.confirmPassword && value !== formData.confirmPassword
-                ? "Passwords do not match"
-                : "",
-          }
-        : {}),
+    setCredentials(prev => ({
+      ...prev,
+      [name]: value
     }));
+    // Clear error when user starts typing
+    if (error) setError('');
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (Object.values(errors).some(e => e) || Object.values(formData).some(v => v === '')) {
-      alert("Please fix the errors before submitting.");
-      return;
-    }
-  
+    setError('');
     setIsLoading(true);
+
     try {
-      const existingStudents = JSON.parse(localStorage.getItem('students')) || [];
-  
-      if (existingStudents.some(student => student.rollNumber === formData.rollNumber)) {
-        setErrors(prev => ({ ...prev, rollNumber: "Roll number already registered" }));
+
+      if (!validateRollNumber(credentials.rollNumber)) {
+        setError('Please enter a valid roll number');
+        setIsLoading(false);
+        toast.error('Invalid roll number format!');
         return;
       }
-  
-      if (existingStudents.some(student => student.email === formData.email)) {
-        setErrors(prev => ({ ...prev, email: "Email already registered" }));
+
+      // Validate password length
+      if (credentials.password.length < 6) {
+        setError('Password must be at least 6 characters long');
+        setIsLoading(false);
+        toast.error('Password must be at least 6 characters long!');
         return;
       }
-  
-      const newStudent = {
-        rollNumber: formData.rollNumber,
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        department: formData.department,
-        createdAt: new Date().toISOString()
+
+      // Hit the API to check if the roll number and password are valid
+      const { data } = await axios.get('http://localhost:3000/api/crud/user', {
+        params: {
+          filter_conditions_and: JSON.stringify(['=', '=']),
+          filter_columns_and: JSON.stringify(['roll_no', 'password']),
+          filter_values_and: JSON.stringify([credentials.rollNumber, credentials.password])
+        }
+      });
+
+      const student = data?.payload?.[0]; // Assuming the response contains a "payload" array with student data
+
+      if (!student) {
+        setError('Invalid roll number or password');
+        setIsLoading(false);
+        toast.error('Invalid roll number or password!');
+        return;
+      }
+
+      // Store the logged-in student's info in localStorage
+      const studentInfo = {
+        rollNumber: student.roll_no,
+        name: student.name,
+        email: student.email,
+        department: student.department,
+        lastLogin: new Date().toISOString()
       };
-  
-      existingStudents.push(newStudent);
-      localStorage.setItem("students", JSON.stringify(existingStudents));
-      alert("Registration successful! Please login.");
-      navigate("/login/student");
-    } catch (err) {
-      alert("An error occurred during registration. Please try again.");
-    } finally {
+
+      localStorage.setItem('currentUser', JSON.stringify(studentInfo));
+
+      // Update authentication state
+      setIsAuthenticated(true);
+
+      // Show success message
+      toast.success('Login successful! Welcome back, ' + student.name);
+
+      // Navigate to the dashboard
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('An error occurred during login. Please try again.');
       setIsLoading(false);
+      toast.error('An error occurred during login. Please try again.');
     }
   };
-  
+
+  // If already authenticated, show loading state
+  if (isAuthenticated) {
+    return (
+      <div className="student-login-container">
+        <div className="student-login-card">
+          <h1 className="login-title">Redirecting...</h1>
+          <div className="loading-spinner">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="student-signup-container">
-      <div className="student-signup-card">
-        <h1 className="signup-title">STUDENT SIGNUP</h1>
-        <form onSubmit={handleSubmit} className="signup-form">
-          
+    <div className="student-login-container">
+      <div className="student-login-card">
+        <h1 className="login-title">STUDENT LOGIN</h1>
+        
+        <form onSubmit={handleSubmit} className="login-form">
           <div className="input-group">
             <input
               type="text"
               name="rollNumber"
-              value={formData.rollNumber}
+              placeholder="Enter roll number"
+              value={credentials.rollNumber}
               onChange={handleChange}
-              placeholder="Roll Number"
-              className="signup-input"
+              className="login-input"
               required
               disabled={isLoading}
+              autoComplete="off"
             />
-            {errors.rollNumber && (
-              <div className="field-error">
-                <span className="error-icon">❗</span> {errors.rollNumber}
-              </div>
-            )}
           </div>
-  
-          <div className="input-group">
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Full Name"
-              className="signup-input"
-              required
-              disabled={isLoading}
-            />
-            {errors.name && (
-              <div className="field-error">
-                <span className="error-icon">❗</span> {errors.name}
-              </div>
-            )}
-          </div>
-  
-          <div className="input-group">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className="signup-input"
-              required
-              disabled={isLoading}
-            />
-            {errors.email && (
-              <div className="field-error">
-                <span className="error-icon">❗</span> {errors.email}
-              </div>
-            )}
-          </div>
-  
+
           <div className="input-group">
             <input
               type="password"
               name="password"
-              value={formData.password}
+              placeholder="Enter password"
+              value={credentials.password}
               onChange={handleChange}
-              placeholder="Password"
-              className="signup-input"
+              className="login-input"
               required
               disabled={isLoading}
+              autoComplete="current-password"
             />
-            {errors.password && (
-              <div className="field-error">
-                <span className="error-icon">❗</span> {errors.password}
-              </div>
-            )}
           </div>
-  
-          <div className="input-group">
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm Password"
-              className="signup-input"
-              required
-              disabled={isLoading}
-            />
-            {errors.confirmPassword && (
-              <div className="field-error">
-                <span className="error-icon">❗</span> {errors.confirmPassword}
-              </div>
-            )}
-          </div>
-  
-          <div className="input-group">
-            <input
-              type="text"
-              name="department"
-              value={formData.department}
-              onChange={handleChange}
-              placeholder="Department"
-              className="signup-input"
-              required
-              disabled={isLoading}
-            />
-            {errors.department && (
-              <div className="field-error">
-                <span className="error-icon">❗</span> {errors.department}
-              </div>
-            )}
-          </div>
-  
+
+          {error && <div className="error-message">{error}</div>}
+
           <button 
             type="submit" 
-            className="signup-button"
+            className="login-button"
             disabled={isLoading}
           >
-            {isLoading ? 'Signing up...' : 'Sign Up'}
+            {isLoading ? 'Logging in...' : 'Log in'}
           </button>
+
+          <div className="signup-link">
+            Don't have an account? <Link to="/signup/student">Sign up</Link>
+          </div>
         </form>
-  
-        <div className="login-link">
-          Already have an account? <Link to="/login/student">Login here</Link>
+
+        <div className="fries-icon">
+          🍟
         </div>
-  
-        <div className="fries-icon">🍟</div>
       </div>
     </div>
   );
-  
 };
 
-export default StudentSignup; 
+export default StudentLogin;

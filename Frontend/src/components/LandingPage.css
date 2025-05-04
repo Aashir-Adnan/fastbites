@@ -1,17 +1,42 @@
-.landing-page {
-  min-height: 100vh;
-  background-color: #FFD700;
-  padding: 2rem;
+/* Global settings */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+body {
+  font-family: 'Bahnschrift', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* Landing Page */
+.landing-page {
+  min-height: 100vh;
+  background-color: #E1EEBC; /* Light Beige background */
+  padding: 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hero Section */
 .hero-section {
   max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 4rem 1rem;
+  padding: 4rem 2rem;
+
+  background-color: #90C67C; /* Light Green background */
+  border: 5px solid #328E6E; /* Dark Green border */
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .hero-content {
@@ -25,7 +50,7 @@
 .logo {
   font-size: 4rem;
   font-weight: 900;
-  color: #000;
+  color: #328E6E;
   letter-spacing: 2px;
   margin: 0;
 }
@@ -36,7 +61,7 @@
 
 .tagline {
   font-size: 1.5rem;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 2rem;
   font-weight: 500;
 }
@@ -52,38 +77,45 @@
 
 .auth-buttons {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 1rem;
 }
 
 .sign-in-btn, .sign-up-btn {
-  padding: 0.8rem 2rem;
-  font-size: 1.1rem;
+  padding: 1.2rem 2.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  border: 2px solid #000;
+  border: 2px solid #328E6E;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(1);
 }
 
 .sign-in-btn {
   background-color: transparent;
-  color: #000;
+  color: #328E6E;
 }
 
 .sign-up-btn {
-  background-color: #000;
-  color: #fff;
+  background-color: #328E6E;
+  color: white;
+}
+
+.sign-in-btn:hover, .sign-up-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .sign-in-btn:hover {
-  background-color: #000;
-  color: #fff;
+  background-color: #328E6E;
+  color: white;
 }
 
 .sign-up-btn:hover {
-  background-color: #333;
-  border-color: #333;
+  background-color: #67AE6E;
+  border-color: #67AE6E;
 }
 
 .featured-image {
@@ -101,26 +133,22 @@
   object-fit: cover;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
   .logo {
     font-size: 3rem;
   }
-  
+
   .tagline {
     font-size: 1.2rem;
   }
-  
+
   .hero-section {
     padding: 2rem 1rem;
   }
 
-  .find-food-btn {
+  .sign-in-btn, .sign-up-btn {
     padding: 1rem 2rem;
     font-size: 1.1rem;
   }
-
-  .sign-in-btn, .sign-up-btn {
-    padding: 0.7rem 1.5rem;
-    font-size: 1rem;
-  }
-} 
+}

@@ -1,0 +1,140 @@
+.restaurant-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 40px);
+  padding: 20px;
+  background: linear-gradient(135deg, #90C67C, #E1EEBC);
+  color: #1e1e1e;
+}
+
+.restaurant-card {
+  background-color: #328E6E;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.restaurant-name {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #E1EEBC;
+}
+
+.restaurant-description {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* Set a fixed size for images and ensure they don’t stretch out */
+.item-image {
+  width: 100%;
+  height: 200px; /* Fixed height */
+  object-fit: cover; /* Ensures the image fills the space without stretching */
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+/* Apply tilt effect to the whole card */
+.item-card {
+  perspective: 1000px; /* Enables 3D space for card tilting */
+  transition: transform 0.3s ease;
+  transform-style: preserve-3d; /* Ensures all child elements tilt in 3D */
+}
+
+.item-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.item-card:hover {
+  transform: scale(1.05); /* Slightly enlarge the card on hover */
+}
+
+/* Add tilt to the image and content */
+.item-card-content.hover-effect {
+  transform: rotateX(0deg) rotateY(0deg) translateZ(0);
+}
+
+
+.save-page-button {
+  background-color: #E1EEBC;
+  color: #328E6E;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  color: #328E6E;
+}
+
+.modal-content button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #328E6E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.pagination button {
+  background-color: #328E6E;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination span {
+  font-weight: bold;
+  color: #328E6E;
+}

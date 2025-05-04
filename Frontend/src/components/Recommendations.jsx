@@ -26,11 +26,7 @@ const Recommendations = () => {
     }
   ];
 
-  const handleItemClick = (item) => {
-    navigate('/item-details', {
-      state: { item }
-    });
-  };
+
 
   return (
     <div className="recommendations-container">
@@ -42,7 +38,6 @@ const Recommendations = () => {
             <div 
               key={index} 
               className="menu-item"
-              onClick={() => handleItemClick(item)}
             >
               <div className="item-header">
                 <h2 className="item-name">{item.name}</h2>

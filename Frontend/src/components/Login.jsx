@@ -12,51 +12,40 @@ const Login = () => {
     }
   };
 
+  const options = [
+    { id: 'student', label: 'Student Login' },
+    { id: 'staff', label: 'Staff Login' }
+  ];
+
   return (
     <div className="login-container">
       <div className="login-card">
         <h1 className="login-title">LOGIN</h1>
-        
+
         <div className="login-options">
-          <div className="login-option">
-            <input
-              type="radio"
-              id="student"
-              name="loginType"
-              value="student"
-              checked={selectedOption === 'student'}
-              onChange={(e) => setSelectedOption(e.target.value)}
-            />
-            <label htmlFor="student">student login</label>
-          </div>
-          
-          <div className="login-option">
-            <input
-              type="radio"
-              id="staff"
-              name="loginType"
-              value="staff"
-              checked={selectedOption === 'staff'}
-              onChange={(e) => setSelectedOption(e.target.value)}
-            />
-            <label htmlFor="staff">staff login</label>
-          </div>
+          {options.map(({ id, label }) => (
+            <div
+              key={id}
+              className={`login-option-box ${selectedOption === id ? 'selected' : ''}`}
+              onClick={() => setSelectedOption(id)}
+            >
+              {label}
+            </div>
+          ))}
         </div>
 
-        <button 
+        <button
           className="login-submit-btn"
           onClick={handleLogin}
           disabled={!selectedOption}
         >
-          log in
+          Login
         </button>
 
-        <div className="fries-icon">
-          🍟
-        </div>
+        <div className="fries-icon">🍟</div>
       </div>
     </div>
   );
 };
 
-export default Login; 
+export default Login;

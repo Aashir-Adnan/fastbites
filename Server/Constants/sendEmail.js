@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 const nodemailer = require('nodemailer');
 async function handleSendEmail(userEmail, html, subject) {
 
@@ -10,7 +10,8 @@ async function handleSendEmail(userEmail, html, subject) {
                 pass: process.env.EMAIL_PASS
             }
         });
-
+        console.log(process.env.EMAIL_PASS);
+        console.log(process.env.EMAIL_USER)
         let mailOptions = {
             from: 'Fast Bites',
             to: `${userEmail}`,
@@ -19,7 +20,6 @@ async function handleSendEmail(userEmail, html, subject) {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log(mailOptions);
 
         return "Email Sent Successfully"
 

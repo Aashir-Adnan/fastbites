@@ -1,4 +1,3 @@
-const LogError = require("../databases/Errorlog");
 const verifyToken = require("./auth");
 const generatePayload = require("./generatePayload");
 const OTPGeneration = require("./OTPGeneration");
@@ -249,7 +248,6 @@ async function otpVerif(req, res, decryptedBody) {
             }
         }
     } catch (error) {
-        LogError(req, res, 500, otpVerif, error.message, "E42");
         throw new Error(error.message);
     }
 }

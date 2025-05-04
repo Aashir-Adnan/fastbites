@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
-import { Outlet } from 'react-router-dom'; // If you're using React Router v6
+import { Outlet } from 'react-router-dom';
 import './Layout.css';
 
 const Layout = () => {
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
-    <div className="layout">
-      <Sidebar />
+    <div className={`layout ${collapsed ? 'with-collapsed' : 'with-expanded'}`}>
+      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       <div className="content-area">
-        <Outlet /> {/* This will render the specific page component */}
+        <div className="content-container">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

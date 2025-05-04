@@ -7,13 +7,14 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  
   useEffect(() => {
     // Check for both student and staff login
-    const currentStudent = JSON.parse(localStorage.getItem('currentStudent'));
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const loggedInStaff = JSON.parse(localStorage.getItem('loggedInStaff'));
 
-    if (currentStudent) {
-      setUser({ ...currentStudent, role: 'student' });
+    if (currentUser) {
+      setUser({ ...currentUser, role: 'student' });
     } else if (loggedInStaff) {
       setUser(loggedInStaff);
     } else {
@@ -25,7 +26,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     // Clear both student and staff data
-    localStorage.removeItem('currentStudent');
+    localStorage.removeItem('currentUser');
     localStorage.removeItem('loggedInStaff');
     navigate('/login');
   };
@@ -41,11 +42,13 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <h1>Welcome, {user?.name}!</h1>
-        <div className="user-info">
-          <span className="user-role">{user?.role === 'student' ? 'Student' : 'Staff'}</span>
-          {user?.role === 'student' && <span className="user-roll">Roll No: {user?.rollNumber}</span>}
-          {user?.role === 'staff' && <span className="user-position">{user?.position}</span>}
+        <div className="header-left">
+          <h1>Welcome, {user?.name}!</h1>
+          <div className="user-info">
+            <span className="user-role">{user?.role === 'student' ? 'Student' : 'Staff'}</span>
+            {user?.role === 'student' && <span className="user-roll">Roll No: {user?.rollNumber}</span>}
+            {user?.role === 'staff' && <span className="user-position">{user?.position}</span>}
+          </div>
         </div>
         <button className="logout-button" onClick={handleLogout}>Logout</button>
       </header>
@@ -67,19 +70,15 @@ const Dashboard = () => {
             <p>View current menus and special offers</p>
           </div>
 
-          {/* <div className="dashboard-card" onClick={() => navigate('/recommendations')}>
+          <div className="dashboard-card" onClick={() => navigate('/recommendations')}>
             <h3>See Recommendations</h3>
             <p>Get personalized food recommendations</p>
-          </div> */}
-
-          <div className="dashboard-card" onClick={() => navigate('/review')}>
-            <h3>Review & Rate Food</h3>
-            <p>Share your dining experience</p>
           </div>
+
         </div>
       </div>
     </div>
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

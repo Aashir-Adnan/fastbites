@@ -1,24 +1,25 @@
-// const sendResponse = require('../../Constants/response');
-// const getAttributes = require('../../Database/getAttributes');
+const sendResponse = require('../../Constants/response');
+const projectDB = require('../../Database/projectDb');
+const { executeQuery } = require('../../Database/queryExecution');
+const crudPut = async (req, res) => {
+    try {
+        const { table, id, data } = req.body;
 
-// const crudPost = async (req, res) => {
-//     try {
-//         const attributes = getAttributes(req.body.table);
-//         const columns = attributes.array.join(', ');
-//         const values = req.body.entry.map(entry => {
-//             return `(${attributes.array.map(col => {
-//                 return `'${entry[col]}'`; 
-//             }).join(', ')})`;
-//         }).join(', '); 
+        if (!table || !id || !data || typeof data !== 'object') {
+            return sendResponse(res, 400, "Missing or invalid parameters.");
+        }
+        const setClause = Object.entries(data)
+            .map(([key, value]) => `${key} = ${typeof value === 'string' ? `'${value}'` : value}`)
+            .join(', ');
 
-//         let query = `INSERT INTO ${req.body.table} (${columns}) VALUES ${values}`;
+        const query = `UPDATE ${table} SET ${setClause} WHERE id = ${id}`;
 
-//         const insertedRecord = await database.query(query);
+        const result = await executeQuery(query, "", projectDB())
 
-//         sendResponse(res, '200', "Successfully Inserted", insertedRecord);
-//     } catch (error) {
-//         sendResponse(res, 500, "An Error Occurred In The CRUD Post Handler Function", error.message);
-//     }
-// };
+        sendResponse(res, 200, "Successfully Updated", result);
+    } catch (error) {
+        sendResponse(res, 500, "An Error Occurred In The CRUD PUT Handler Function", error.message);
+    }
+};
 
-// module.exports = crudPost;
+module.exports = crudPut;

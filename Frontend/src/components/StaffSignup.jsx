@@ -57,7 +57,7 @@ const StaffSignup = () => {
       };
 
       // Get existing staff data
-      const existingStaff = JSON.parse(localStorage.getItem('staff') || '[]');
+      const existingStaff = JSON.parse(localStorage.getItem('currentUser') || '[]');
 
       // Check if email already exists
       if (existingStaff.some(staff => staff.email === formData.email)) {
@@ -67,7 +67,7 @@ const StaffSignup = () => {
 
       // Add new staff member
       existingStaff.push(staffData);
-      localStorage.setItem('staff', JSON.stringify(existingStaff));
+      localStorage.setItem('currentUser', JSON.stringify(existingStaff));
 
       // Show success message and redirect to login
       alert('Registration successful! Please login with your credentials.');

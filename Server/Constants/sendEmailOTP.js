@@ -59,7 +59,7 @@ async function handleSendEmail(userEmail, OTP, res) {
 
         
         let info = await transporter.sendMail(mailOptions);
-        logMessage(mailOptions);
+        console.log(mailOptions);
 
         
         connection = await securityDB();

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './StudentLogin.css';
 
 const StudentLogin = () => {
@@ -12,19 +15,17 @@ const StudentLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check if user is already logged in
   useEffect(() => {
-    const currentStudent = localStorage.getItem('currentStudent');
-    if (currentStudent) {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
       setIsAuthenticated(true);
       navigate('/dashboard');
     }
   }, [navigate]);
 
   const validateRollNumber = (rollNumber) => {
-    // Basic roll number validation (adjust pattern as needed)
-    const rollNumberPattern = /^[A-Za-z0-9]{6,10}$/;
-    return rollNumberPattern.test(rollNumber);
+    const rollRegex = /^[L,l](1[7-9]|2[0-5])-?(?!0000)\d{4}$/;
+    return rollRegex.test(rollNumber);
   };
 
   const handleChange = (e) => {
@@ -43,10 +44,11 @@ const StudentLogin = () => {
     setIsLoading(true);
 
     try {
-      // Validate roll number format
+
       if (!validateRollNumber(credentials.rollNumber)) {
-        setError('Please enter a valid roll number (6-10 alphanumeric characters)');
+        setError('Please enter a valid roll number');
         setIsLoading(false);
+        toast.error('Invalid roll number format!');
         return;
       }
 
@@ -54,57 +56,53 @@ const StudentLogin = () => {
       if (credentials.password.length < 6) {
         setError('Password must be at least 6 characters long');
         setIsLoading(false);
+        toast.error('Password must be at least 6 characters long!');
         return;
       }
 
-      // Get stored student data
-      const storedStudents = JSON.parse(localStorage.getItem('students') || '[]');
-      
-      if (storedStudents.length === 0) {
-        setError('No student accounts found. Please sign up first.');
-        setIsLoading(false);
-        return;
-      }
+      // Hit the API to check if the roll number and password are valid
+      const { data } = await axios.get('http://localhost:3000/api/crud/user', {
+        params: {
+          filter_conditions_and: JSON.stringify(['=', '=']),
+          filter_columns_and: JSON.stringify(['roll_no', 'password']),
+          filter_values_and: JSON.stringify([credentials.rollNumber, credentials.password])
+        }
+      });
 
-      // Find the student with matching roll number
-      const student = storedStudents.find(s => s.rollNumber === credentials.rollNumber);
+      const student = data?.payload?.[0]; // Assuming the response contains a "payload" array with student data
 
       if (!student) {
         setError('Invalid roll number or password');
         setIsLoading(false);
-        return;
-      }
-
-      // In a real application, you would hash the password and compare hashes
-      if (student.password !== credentials.password) {
-        setError('Invalid roll number or password');
-        setIsLoading(false);
+        toast.error('Invalid roll number or password!');
         return;
       }
 
       // Store the logged-in student's info in localStorage
       const studentInfo = {
-        rollNumber: student.rollNumber,
+        user_id: data.payload[0].id,
+        rollNumber: student.roll_no,
         name: student.name,
         email: student.email,
         department: student.department,
         lastLogin: new Date().toISOString()
       };
-      
-      localStorage.setItem('currentStudent', JSON.stringify(studentInfo));
+
+      localStorage.setItem('currentUser', JSON.stringify(studentInfo));
 
       // Update authentication state
       setIsAuthenticated(true);
 
       // Show success message
-      alert('Login successful! Welcome back, ' + student.name);
+      toast.success('Login successful! Welcome back, ' + student.name);
 
-      // Navigate to unified dashboard
+      // Navigate to the dashboard
       navigate('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
       setError('An error occurred during login. Please try again.');
       setIsLoading(false);
+      toast.error('An error occurred during login. Please try again.');
     }
   };
 
@@ -177,4 +175,4 @@ const StudentLogin = () => {
   );
 };
 
-export default StudentLogin; 
+export default StudentLogin;
