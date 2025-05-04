@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f5f5f5;
+  background-color: #E1EEBC;
 }
 
 .selection-content {
@@ -18,7 +18,7 @@
 
 .selection-content h1 {
   margin-bottom: 2rem;
-  color: #333;
+  color: #328E6E;
   font-size: 1.8rem;
 }
 
@@ -39,12 +39,12 @@
 }
 
 .student-signup-btn {
-  background-color: #4CAF50;
+  background-color: #67AE6E;
   color: white;
 }
 
 .staff-signup-btn {
-  background-color: #2196F3;
+  background-color: #328E6E;
   color: white;
 }
 
@@ -52,4 +52,4 @@
 .staff-signup-btn:hover {
   transform: translateY(-2px);
   opacity: 0.9;
-} 
+}
