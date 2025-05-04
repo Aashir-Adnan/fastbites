@@ -1,0 +1,126 @@
+.landing-page {
+  min-height: 100vh;
+  background-color: #FFD700;
+  padding: 2rem;
+}
+
+.hero-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.hero-content {
+  margin-bottom: 3rem;
+}
+
+.logo-container {
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.fries-icon {
+  margin-left: 0.5rem;
+}
+
+.tagline {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.sign-in-btn, .sign-up-btn {
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: 2px solid #000;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sign-in-btn {
+  background-color: transparent;
+  color: #000;
+}
+
+.sign-up-btn {
+  background-color: #000;
+  color: #fff;
+}
+
+.sign-in-btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.sign-up-btn:hover {
+  background-color: #333;
+  border-color: #333;
+}
+
+.featured-image {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto 0;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    font-size: 3rem;
+  }
+  
+  .tagline {
+    font-size: 1.2rem;
+  }
+  
+  .hero-section {
+    padding: 2rem 1rem;
+  }
+
+  .find-food-btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+
+  .sign-in-btn, .sign-up-btn {
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+  }
+} 

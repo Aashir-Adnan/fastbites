@@ -1,0 +1,127 @@
+.recommendations-container {
+  min-height: 100vh;
+  background-image: url('../assets/background2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 2rem;
+}
+
+.recommendations-content {
+  width: 100%;
+  max-width: 800px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 3rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.recommendations-title {
+  font-family: 'Impact', sans-serif;
+  font-size: 2rem;
+  color: #000;
+  margin-bottom: 2rem;
+  letter-spacing: 2px;
+}
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.menu-item {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  transform: translateX(10px);
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.item-name {
+  font-family: 'Impact', sans-serif;
+  font-size: 1.8rem;
+  color: #000;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.item-price {
+  font-family: 'Impact', sans-serif;
+  font-size: 1.8rem;
+  color: #000;
+}
+
+.spicy-icon {
+  font-size: 1.5rem;
+}
+
+.item-description {
+  font-family: 'Arial', sans-serif;
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.order-now-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.order-now-button:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .recommendations-container {
+    padding: 2rem 1rem;
+  }
+
+  .recommendations-content {
+    padding: 2rem;
+  }
+
+  .recommendations-title {
+    font-size: 2.5rem;
+  }
+
+  .item-name, .item-price {
+    font-size: 1.5rem;
+  }
+
+  .order-now-button {
+    position: static;
+    width: 100%;
+    margin-top: 2rem;
+  }
+} 

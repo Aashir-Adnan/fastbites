@@ -1,0 +1,104 @@
+.dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+  position: relative;
+}
+
+.dashboard-container h1 {
+  font-size: 2.5rem;
+  color: #000;
+  margin-bottom: 2rem;
+  font-family: 'Bahnschrift ', cursive;
+}
+
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 450px;
+  z-index: 1;
+}
+
+.menu-button {
+  padding: 15px 25px;
+  font-size: 1.3rem;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 35px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-family: 'Bahnschrift ', cursive, sans-serif;
+  width: 100%;
+  letter-spacing: 1px;
+}
+
+.menu-button:hover {
+  transform: translateY(-2px);
+  background-color: #222;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu-button:active {
+  transform: translateY(1px);
+}
+
+.menu-icon {
+  font-size: 2rem;
+  margin-right: 1rem;
+  min-width: 40px;
+  text-align: center;
+}
+
+.menu-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+  font-family: 'Bahnschrift ', cursive;
+}
+
+.menu-description {
+  font-size: 0.9rem;
+  color: #666;
+  font-family: 'Bahnschrift ', cursive;
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 15px;
+  }
+
+  .dashboard-container h1 {
+    font-size: 2rem;
+  }
+
+  .menu-button {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+  }
+
+  .menu-icon {
+    font-size: 1.5rem;
+    margin-right: 0.8rem;
+  }
+
+  .menu-title {
+    font-size: 1.1rem;
+  }
+
+  .menu-description {
+    font-size: 0.8rem;
+  }
+} 
