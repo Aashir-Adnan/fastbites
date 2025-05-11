@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const crudRoutes = require('./routes/crudRoutes.js')
 const customRoutes = require('./routes/customRoutes.js')
+const staticRoutes = require('./routes/staticRoutes.js')
 
 const applyMiddleware = require('./Protection_Protocols/middleware.js'); 
 require('./global.js');
@@ -31,6 +32,7 @@ async function initializeApp() {
       applyMiddleware(app);
       app.use('/api/crud', crudRoutes)
       app.use('/api/custom', customRoutes)
+      app.use('/api/static', staticRoutes)
       app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
       });

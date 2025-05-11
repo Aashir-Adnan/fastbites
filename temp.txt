@@ -1,0 +1,170 @@
+=========================
+    SDT Assignment 3
+=========================
+
+
+
+Stmt => WhileStmt 
+    WhileStme.false = new Lable();
+    
+Stmt => Expr ∷
+    Stmt.code = Expr.code ::
+
+Stmt => IfStmt
+    IfStmt.false = new Lable();
+    Stmt.code = IfStmt.code
+
+Stmt => CompStmt
+    Stmt.code = CompStmt.code
+
+Stmt => Declaration
+    Stmt.code = Declaration.code
+
+Stmt => ∷
+    Stmt.code = "::"
+
+Declaration => Type IdentList ∷
+    IdentList.type = Type.val
+    Declaration.code = IdentList.code
+
+Type => Adadi
+    Type.val = "Adadi"
+Type => Ashriya
+    Type.val = "Ashriya"
+Type => Harf
+    Type.val = "Harf" //WAS I SUPPOSED TO REPLACE THESE WITH LIKE "char" FOR HARF AND WHATEVER ELSE EVERYTHING MEANS?
+Type => Matn
+    Type.val = "Matn" //IM GOING TO HOPE NOT BUT JUST IN CASE IT GETS BROUGHT UP LATER, I == DID == THINK ABOUT IT
+Type => Mantiqi
+    Type.val = "Mantiqi"
+
+IdentList => identifier , IdentList
+    gen("IdentList.type identifier") //DECLARATIONS AS IS??
+    IdentList1.type = IdentList.type
+    IdentList.code = "IdentList.type identifier, " + IdentList1.code
+
+IdentList => identifier
+    gen("IdentList.type identifier")
+    IdentList.code = IdentList.type identifier
+
+WhileStmt => while ( Expr ) Stmt
+    Expr.true = newLabel()
+    Expr.false = WhileStmt.false
+    gen("Expr.true:")
+    gen("Stmt.code")
+    gen("if Expr.addr goto Expr.true")
+    gen("goto Expr.false")
+
+    WhileStmt.code =
+        gen("Expr.true:") +
+        Expr.code +
+        gen("if Expr.addr goto Expr.true") +
+        gen("goto Expr.false") +
+        gen("Expr.false:") +
+        Stmt.code +
+        gen("goto Expr.true")
+
+IfStmt => Agar ( Expr ) Stmt ElsePart
+    L1.addr = newLabel()
+    L2.addr = newLabel()
+    L3.addr = newLabel()
+    gen("Agar Expr.addr goto L1.addr")
+    gen("goto L2.addr")
+    gen("L1.addr:")
+        gen("Stmt.code")
+        gen("goto IfStmt.false")
+    gen("L2.addr:")
+        gen("ElsePart.code")
+
+    IfStmt.code =
+        Expr.code +
+        goto L1.addr +
+        L1.addr: +
+            Stmt.code +
+            goto IfStmt.false +
+        gen("L2:") +
+            ElsePart.code +
+
+ElsePart => Wagarna Stmt
+    ElsePart.code = Stmt.code
+ElsePart => ^ / null
+    ElsePart.code = ""
+
+CompStmt =>  StmtList 
+    CompStmt.code = StmtList.code
+
+StmtList => StmtList Stmt
+    StmtList.code = StmtList1.code + Stmt.code
+
+StmtList => ^ / null
+    StmtList.code = ""
+
+Expr => identifier ∶= Expr
+    gen("identifier := Expr2.addr")
+    Expr.code = identifier := Expr2.addr 
+    Expr.addr = identifier
+
+Expr => Rvalue
+    Expr.code = Rvalue.code
+    Expr.addr = Rvalue.addr
+
+Rvalue => Rvalue Compare Mag
+    Rvalue.addr = newTemp()
+    gen("Rvalue.addr = Rvalue1.addr Compare.op Mag.addr")
+    Rvalue.code = Rvalue1.addr Compare.op Mag.addr 
+
+Rvalue => Mag
+    Rvalue.code = Mag.code
+    Rvalue.addr = Mag.addr
+
+Compare => ==
+    Compare.op = "=="
+Compare => <
+    Compare.op = "<"
+Compare => >
+    Compare.op = ">"
+Compare => <=
+    Compare.op = "<="
+Compare => >=
+    Compare.op = ">="
+Compare => !=
+    Compare.op = "!="
+Compare => <>
+    Compare.op = "!="
+
+Mag => Mag + Term   
+    Mag.addr = newTemp()
+    Mag.code = Mag1.code + Term.code + gen("Mag.addr = Mag1.addr + Term.addr")
+
+Mag => Mag − Term
+    Mag.addr = newTemp()
+    gen("Mag.addr = Mag1.addr - Term.addr")
+    Mag.code = Mag1.addr - Term.addr 
+
+Mag => Term
+    Mag.code = Term.code
+    Mag.addr = Term.addr
+
+Term => Term ∗ Factor
+    Term.addr = newTemp()
+    gen("Term.addr = Term1.addr * Factor.addr")
+    Term.code = Term1.addr * Factor.addr
+
+Term => Term / Factor
+    Term.addr = newTemp()
+    gen("Term.addr = Term1.addr / Factor.addr")
+    Term.code = Term1.addr / Factor.addr
+
+Term => Factor
+    Term.code = Factor.code
+    Term.addr = Factor.addr
+
+Factor => ( Expr )
+    Factor.code = Expr.code
+    Factor.addr = Expr.addr
+
+Factor => identifier
+    Factor.addr = identifier
+
+Factor => number
+    Factor.addr = number

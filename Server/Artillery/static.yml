@@ -1,0 +1,52 @@
+config:
+  target: "http://localhost:3000"
+  processor: "./generate-entries.js"
+  phases:
+    - duration: 10
+      arrivalCount: 2
+      name: "Static Hit, 2 VU's, 4 hits x 3 req [12 each]"
+  plugins:
+    ensure: {}
+    apdex: {}
+    metrics-by-endpoint: {}
+  apdex:
+    threshold: 100
+  ensure:
+    thresholds:
+      - http.response_time.p99: 100
+      - http.response_time.p95: 75
+
+scenarios:
+  - name: "Run all 3 scenarios, 4 times each"
+    flow:
+      - loop:
+          - function: "setUserVars"
+          - post:
+              url: "/api/static/post/user"
+              json:
+                entry:
+                  - name: "Aashir Adnan"
+                    roll_no: "L22-{{ roll_no }}"
+                    email: "l22{{ roll_no }}@lhr.nu.edu.pk"
+                    password: "123456"
+                    department: "CS"
+                table: "user"
+              afterResponse: "logResponse"
+
+          - function: "setDiningHallVars"
+          - post:
+              url: "/api/static/post/dininghall"
+              json:
+                entry:
+                  - category: "Main Course"
+                    name: "Item {{name}}"
+                    price: {{ price }}
+                    isAvailable: 1
+                    rating: 5
+                table: "dininghall"
+              afterResponse: "logResponse"
+
+          - get:
+              url: "/api/static/get/user"
+              afterResponse: "logResponse"
+        count: 4
